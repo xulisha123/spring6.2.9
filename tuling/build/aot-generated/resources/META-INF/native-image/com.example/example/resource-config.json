@@ -1,0 +1,45 @@
+{
+  "resources": {
+    "includes": [
+      {
+        "pattern": "\\Q\/\\E"
+      },
+      {
+        "pattern": "\\QMETA-INF\\E"
+      },
+      {
+        "pattern": "\\QMETA-INF\/spring.factories\\E"
+      },
+      {
+        "pattern": "\\Qorg\\E"
+      },
+      {
+        "pattern": "\\Qorg\/springframework\\E"
+      },
+      {
+        "pattern": "\\Qorg\/springframework\/http\\E"
+      },
+      {
+        "pattern": "\\Qorg\/springframework\/http\/codec\\E"
+      },
+      {
+        "pattern": "\\Qorg\/springframework\/http\/codec\/CodecConfigurer.properties\\E"
+      },
+      {
+        "pattern": "\\Qorg\/springframework\/http\/mime.types\\E"
+      },
+      {
+        "pattern": "\\Qorg\/springframework\/web\\E"
+      },
+      {
+        "pattern": "\\Qorg\/springframework\/web\/util\\E"
+      },
+      {
+        "pattern": "\\Qorg\/springframework\/web\/util\/HtmlCharacterEntityReferences.properties\\E"
+      },
+      {
+        "pattern": "\\Qspring.properties\\E"
+      }
+    ]
+  }
+}

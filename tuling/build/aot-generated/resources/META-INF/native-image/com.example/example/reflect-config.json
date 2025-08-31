@@ -1,0 +1,316 @@
+[
+  {
+    "name": "com.xushu.aot.demo.MyApplication",
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "queriedMethods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "greeting",
+        "parameterTypes": [ ]
+      }
+    ]
+  },
+  {
+    "name": "com.xushu.aot.demo.MyApplication__ApplicationContextInitializer",
+    "condition": {
+      "typeReachable": "com.xushu.aot.demo.MyApplication"
+    },
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [ ]
+      }
+    ]
+  },
+  {
+    "name": "jakarta.inject.Inject"
+  },
+  {
+    "name": "jakarta.inject.Provider"
+  },
+  {
+    "name": "jakarta.inject.Qualifier"
+  },
+  {
+    "name": "java.lang.CharSequence",
+    "queryAllPublicMethods": true
+  },
+  {
+    "name": "java.lang.constant.Constable",
+    "queryAllPublicMethods": true
+  },
+  {
+    "name": "java.lang.constant.ConstantDesc",
+    "queryAllPublicMethods": true
+  },
+  {
+    "name": "java.lang.String",
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true
+  },
+  {
+    "name": "java.net.URI",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "java.sql.Date",
+    "condition": {
+      "typeReachable": "java.sql.Date"
+    },
+    "methods": [
+      {
+        "name": "toLocalDate",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "valueOf",
+        "parameterTypes": [
+          "java.time.LocalDate"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.sql.Timestamp",
+    "condition": {
+      "typeReachable": "java.sql.Timestamp"
+    },
+    "methods": [
+      {
+        "name": "from",
+        "parameterTypes": [
+          "java.time.Instant"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.util.Map"
+  },
+  {
+    "name": "javax.inject.Inject"
+  },
+  {
+    "name": "javax.inject.Qualifier"
+  },
+  {
+    "name": "javax.money.MonetaryAmount"
+  },
+  {
+    "name": "kotlin.Metadata"
+  },
+  {
+    "name": "kotlin.reflect.full.KClasses"
+  },
+  {
+    "name": "org.eclipse.core.runtime.FileLocator"
+  },
+  {
+    "name": "org.reactivestreams.Publisher"
+  },
+  {
+    "name": "org.springframework.beans.factory.Aware",
+    "queryAllPublicMethods": true
+  },
+  {
+    "name": "org.springframework.beans.factory.config.BeanFactoryPostProcessor",
+    "queryAllPublicMethods": true
+  },
+  {
+    "name": "org.springframework.beans.factory.SmartInitializingSingleton",
+    "queryAllPublicMethods": true
+  },
+  {
+    "name": "org.springframework.context.ApplicationContextAware",
+    "queryAllPublicMethods": true
+  },
+  {
+    "name": "org.springframework.context.event.DefaultEventListenerFactory",
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "queriedMethods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [ ]
+      }
+    ]
+  },
+  {
+    "name": "org.springframework.context.event.EventListenerFactory",
+    "queryAllPublicMethods": true
+  },
+  {
+    "name": "org.springframework.context.event.EventListenerMethodProcessor",
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "queriedMethods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [ ]
+      }
+    ]
+  },
+  {
+    "name": "org.springframework.core.io.ResourceEditor",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "org.springframework.core.Ordered",
+    "queryAllPublicMethods": true
+  },
+  {
+    "name": "org.springframework.http.codec.support.DefaultClientCodecConfigurer",
+    "condition": {
+      "typeReachable": "org.springframework.http.codec.CodecConfigurerFactory"
+    },
+    "allPublicConstructors": true
+  },
+  {
+    "name": "org.springframework.http.codec.support.DefaultServerCodecConfigurer",
+    "condition": {
+      "typeReachable": "org.springframework.http.codec.CodecConfigurerFactory"
+    },
+    "allPublicConstructors": true
+  },
+  {
+    "name": "org.springframework.http.HttpMethod",
+    "methods": [
+      {
+        "name": "valueOf",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "org.springframework.http.HttpStatus",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "allDeclaredConstructors": true,
+    "allPublicMethods": true,
+    "methods": [
+      {
+        "name": "getReasonPhrase",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "is1xxInformational",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "is2xxSuccessful",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "is3xxRedirection",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "is4xxClientError",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "is5xxServerError",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "isError",
+        "parameterTypes": [ ]
+      }
+    ]
+  },
+  {
+    "name": "org.springframework.http.MediaTypeEditor",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "org.springframework.http.ProblemDetail",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "methods": [
+      {
+        "name": "getDetail",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getInstance",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getProperties",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getStatus",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getTitle",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getType",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "setDetail",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setInstance",
+        "parameterTypes": [
+          "java.net.URI"
+        ]
+      },
+      {
+        "name": "setProperties",
+        "parameterTypes": [
+          "java.util.Map"
+        ]
+      },
+      {
+        "name": "setStatus",
+        "parameterTypes": [
+          "int"
+        ]
+      },
+      {
+        "name": "setStatus",
+        "parameterTypes": [
+          "org.springframework.http.HttpStatus"
+        ]
+      },
+      {
+        "name": "setTitle",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setType",
+        "parameterTypes": [
+          "java.net.URI"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory$EmbeddedDataSourceProxy",
+    "condition": {
+      "typeReachable": "org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory"
+    },
+    "methods": [
+      {
+        "name": "shutdown",
+        "parameterTypes": [ ]
+      }
+    ]
+  }
+]
