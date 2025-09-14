@@ -65,7 +65,7 @@ import org.springframework.util.ObjectUtils;
  */
 public abstract class AbstractApplicationEventMulticaster
 		implements ApplicationEventMulticaster, BeanClassLoaderAware, BeanFactoryAware {
-
+	// 检索器
 	private final DefaultListenerRetriever defaultRetriever = new DefaultListenerRetriever();
 
 	final Map<ListenerCacheKey, CachedListenerRetriever> retrieverCache = new ConcurrentHashMap<>(64);
@@ -188,7 +188,7 @@ public abstract class AbstractApplicationEventMulticaster
 	 */
 	protected Collection<ApplicationListener<?>> getApplicationListeners(
 			ApplicationEvent event, ResolvableType eventType) {
-
+		// 获取事件目标对象
 		Object source = event.getSource();
 		Class<?> sourceType = (source != null ? source.getClass() : null);
 		ListenerCacheKey cacheKey = new ListenerCacheKey(eventType, sourceType);
@@ -219,7 +219,7 @@ public abstract class AbstractApplicationEventMulticaster
 			// If result is null, the existing retriever is not fully populated yet by another thread.
 			// Proceed like caching wasn't possible for this current local attempt.
 		}
-
+		// 根据事件类型解析出所有对应得监听器
 		return retrieveApplicationListeners(eventType, sourceType, newRetriever);
 	}
 
@@ -245,13 +245,15 @@ public abstract class AbstractApplicationEventMulticaster
 			listenerBeans = new LinkedHashSet<>(this.defaultRetriever.applicationListenerBeans);
 		}
 
-		// Add programmatically registered listeners, including ones coming
-		// from ApplicationListenerDetector (singleton beans and inner beans).
+
+		// 循环注解的监听器
 		for (ApplicationListener<?> listener : listeners) {
+			// 当前监听器是否 监听的发布事件
 			if (supportsEvent(listener, eventType, sourceType)) {
 				if (retriever != null) {
 					filteredListeners.add(listener);
 				}
+				// 是就加入到allListeners
 				allListeners.add(listener);
 			}
 		}
@@ -499,9 +501,9 @@ public abstract class AbstractApplicationEventMulticaster
 	 * Helper class that encapsulates a general set of target listeners.
 	 */
 	private class DefaultListenerRetriever {
-
+		// 存储EventListenerMethodProcessor（处理@EventListener）注册 的 Listener
 		public final Set<ApplicationListener<?>> applicationListeners = new LinkedHashSet<>();
-
+		//  存储所有ApplicationListener 接口的 bean名称（为了给ApplicationListenerDetector做补充）
 		public final Set<String> applicationListenerBeans = new LinkedHashSet<>();
 
 		public Collection<ApplicationListener<?>> getApplicationListeners() {

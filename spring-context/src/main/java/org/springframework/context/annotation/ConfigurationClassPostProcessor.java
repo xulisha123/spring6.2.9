@@ -307,7 +307,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			// Simply call processConfigurationClasses lazily at this point then.
 			processConfigBeanDefinitions((BeanDefinitionRegistry) beanFactory);
 		}
-
+		// 使用cglib对配置类进行代理，因为@Bean方法到时候要进行创建Bean的实例
 		enhanceConfigurationClasses(beanFactory);
 		beanFactory.addBeanPostProcessor(new ImportAwareBeanPostProcessor(beanFactory));
 	}
@@ -504,6 +504,12 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 					}
 				}
 			}
+			/*
+			 只有full版配置类才会创建cglib代理
+			 虽然我们在指定配置的时候不标注@Configuration也行，所以加不加注解的区别就在这里
+			 那么加了@Configuration和不加有本质上有什么区别的？
+			 当在配置类中一个@Bean 使用方法的方式引用另一个Bean如果不加注解就会重复加载Bean
+			 如果加了@Configuration  则会在这里创建cglib代理，当调用@Bean方法时会先检测容器中是否存在*/
 			if (ConfigurationClassUtils.CONFIGURATION_CLASS_FULL.equals(configClassAttr)) {
 				if (!(beanDef instanceof AbstractBeanDefinition abd)) {
 					throw new BeanDefinitionStoreException("Cannot enhance @Configuration bean definition '" +
@@ -542,6 +548,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 					logger.trace(String.format("Replacing bean definition '%s' existing class '%s' with " +
 							"enhanced class '%s'", entry.getKey(), configClass.getName(), enhancedClass.getName()));
 				}
+				// 重新修改Bean定义的Class，在创建Bean的实例时将会实例cglib的类
 				beanDef.setBeanClass(enhancedClass);
 			}
 		}

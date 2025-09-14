@@ -23,6 +23,9 @@ public class MainClass {
 		IInstanceA instanceA = (IInstanceA) ioc.getBean("instanceA");
         System.out.println(instanceA.getClass());
 		instanceA.say();
+		IInstanceB instanceB = (IInstanceB) ioc.getBean("instanceB");
+		System.out.println(instanceB.getClass());
+		instanceB.say();
     }
 
 

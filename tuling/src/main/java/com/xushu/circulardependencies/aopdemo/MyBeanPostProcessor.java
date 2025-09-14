@@ -13,9 +13,9 @@ public class MyBeanPostProcessor implements BeanPostProcessor{
 
 	@Override
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-		if(bean instanceof InstanceA){
+		/*if(bean instanceof InstanceA){
 			return new InstanceA();
-		}
+		}*/
 		return bean;
 	}
 

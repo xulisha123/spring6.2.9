@@ -3,6 +3,7 @@ package com.xushu.circulardependencies.aopdemo;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -11,11 +12,9 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-
 public class InstanceA implements IInstanceA,InitializingBean{
 
-    @Autowired  // bytype byname
-	//@Resource  	// byname
+    @Autowired
     private IInstanceB instanceB;
 
     public IInstanceB getInstanceB() {
@@ -26,20 +25,14 @@ public class InstanceA implements IInstanceA,InitializingBean{
         this.instanceB = instanceB;
     }
 
-
-    public InstanceA() {
-        System.out.println("创建A");
-    }
-
-	/*@Lazy
-	public InstanceA(IInstanceB instanceB) {
-		this.instanceB = instanceB;
-	}*/
+	public InstanceA() {
+		System.out.println("A创建");
+	}
 
 	@Override
 	@Async   	//  AOP    初始化 另外一个bp     创建动态代理
 	public void say() {
-		System.out.println("I'm AA， My BB is"+instanceB.toString());
+		System.out.println("I'm AA， My BB is"+instanceB.getClass());
 	}
 
 

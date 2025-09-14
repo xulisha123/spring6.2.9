@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 /**
  * Created by xsls on 2019/5/29.
  */
-@Component
+//@Component
 public class InstanceC implements IInstanceC {
 
 

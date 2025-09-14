@@ -15,15 +15,11 @@ public class BService implements IBService{
 	@Autowired
     private IAService aService;
 
-	@Lazy
-	public BService(IAService aService) {
-		this.aService = aService;
-	}
 
 	// 默认
-	/*public BService() {
+	public BService() {
         System.out.println("创建B");
-    }*/
+    }
 
 
 	@Override

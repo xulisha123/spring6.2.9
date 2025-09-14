@@ -1,10 +1,10 @@
 package com.xushu.lessons.all.service;
 
+import jakarta.annotation.ManagedBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
-@Component
 public class XushuService  {
 	@Autowired
 	private  UserService userService;

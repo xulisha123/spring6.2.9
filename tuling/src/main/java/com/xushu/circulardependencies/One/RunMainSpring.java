@@ -18,13 +18,8 @@ public class RunMainSpring {
 
 		// ioc容器 spring容器
 		AnnotationConfigApplicationContext ioc = new AnnotationConfigApplicationContext(RunMainSpring.class);
-
-			  ioc.getBean("AService");
-
-//		 AService aService1 = new AService();
-//		 BService bService1 = new BService();
-		// a.setb(b)
-		// b.seta(a)
+		//ioc.setAllowCircularReferences(false);	// 设置是否开启循环依赖
+		IAService aService = (IAService) ioc.getBean("AService");
 
 	}
 

@@ -11,7 +11,7 @@ public class MainStarter {
 		AnnotationConfigApplicationContext ioc = new AnnotationConfigApplicationContext(MainConfig.class);
 		System.out.println("容器加载完成");
 		Object bean = ioc.getBean("car");
-		System.out.println(bean);
+		System.out.println(bean.getClass());
 
 	}
 

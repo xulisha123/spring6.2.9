@@ -446,7 +446,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			}
 		}
 
-		// Multicast right now if possible - or lazily once the multicaster is initialized
+		// 这里是唯一添加早期事件的地方。所以一定要发布事件才能添加早期事件
+		// 执行refresh-->registerListeners就会earlyApplicationEvents赋为null
+		// 所以registerListeners之前发布的事件都是早期事件
 		if (this.earlyApplicationEvents != null) {
 			this.earlyApplicationEvents.add(applicationEvent);
 		}
@@ -605,25 +607,26 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				postProcessBeanFactory(beanFactory);
 
 				StartupStep beanPostProcess = this.applicationStartup.start("spring.context.beans.post-process");
+				// 解析配置类   扫描包\@Import
 				// 注册beanDefinition
 				invokeBeanFactoryPostProcessors(beanFactory);
-				// Register bean processors that intercept bean creation.
+				// 注册BeanPostProcessor
 				registerBeanPostProcessors(beanFactory);
 				beanPostProcess.end();
 
 				// Initialize message source for this context.
 				initMessageSource();
 
-				// Initialize event multicaster for this context.
+				// 创建事件发布器
 				initApplicationEventMulticaster();
 
 				// Initialize other special beans in specific context subclasses.
 				onRefresh();
 
-				// Check for listener beans and register them.
+				// 注册监听器 （只会注册实现接口的监听器）
 				registerListeners();
 
-				// Instantiate all remaining (non-lazy-init) singletons.
+				// 一个个加载单例bean
 				finishBeanFactoryInitialization(beanFactory);
 
 				// Last step: publish corresponding event.
@@ -848,15 +851,20 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 */
 	protected void initApplicationEventMulticaster() {
 		ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+		//判断容器中是有没有applicationEventMulticaster 应用多播器组件
 		if (beanFactory.containsLocalBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME)) {
+			//直接显示的调用我们的getBean获取出来赋值给我们的applicationContext对象
 			this.applicationEventMulticaster =
 					beanFactory.getBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, ApplicationEventMulticaster.class);
 			if (logger.isTraceEnabled()) {
 				logger.trace("Using ApplicationEventMulticaster [" + this.applicationEventMulticaster + "]");
 			}
 		}
+		//容器中没有的话
 		else {
+			//spring ioc显示的new 一个SimpleApplicationEventMulticaster对象保存在applicatoinContext对象中
 			this.applicationEventMulticaster = new SimpleApplicationEventMulticaster(beanFactory);
+			//并且注入到容器中
 			beanFactory.registerSingleton(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, this.applicationEventMulticaster);
 			if (logger.isTraceEnabled()) {
 				logger.trace("No '" + APPLICATION_EVENT_MULTICASTER_BEAN_NAME + "' bean, using " +
@@ -908,23 +916,29 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Doesn't affect other listeners, which can be added without being beans.
 	 */
 	protected void registerListeners() {
-		// Register statically specified listeners first.
+		// 获取容器中所有的监听器对象
+		// 这个时候正常流程是不会有监听器的,除非手动调用addApplicationListeners()
 		for (ApplicationListener<?> listener : getApplicationListeners()) {
+			//把监听器挨个的注册到多播器上去x
 			getApplicationEventMulticaster().addApplicationListener(listener);
 		}
 
-		// Do not initialize FactoryBeans here: We need to leave all regular beans
-		// uninitialized to let post-processors apply to them!
-		String[] listenerBeanNames = getBeanNamesForType(ApplicationListener.class, true, false);
+		//获取bean定义中的实现了ApplicationListener监听器对象(只会拿到bean的名字，不会创建bean)
+		// 接口方式的监听就是在这里注册到多播器里面的 , 还有一个地方
+ 		String[] listenerBeanNames = getBeanNamesForType(ApplicationListener.class, true, false);
+		//把监听器的名称注册到我们的多播器上
 		for (String listenerBeanName : listenerBeanNames) {
 			getApplicationEventMulticaster().addApplicationListenerBean(listenerBeanName);
 		}
 
-		// Publish early application events now that we finally have a multicaster...
+		//在这里获取我们的早期事件（在registerListeners()之前发布的事件publishEvent）
 		Set<ApplicationEvent> earlyEventsToProcess = this.earlyApplicationEvents;
+		// 在这里赋null。  也就是值此之后都将没有早期事件了
 		this.earlyApplicationEvents = null;
 		if (!CollectionUtils.isEmpty(earlyEventsToProcess)) {
 			for (ApplicationEvent earlyEvent : earlyEventsToProcess) {
+				// 在registerListeners()发布的事件，不会立马执行
+				// 而是等registerListeners()调用的时候才发布（因为registerListeners()方法都没有调用，哪来的监听器去发布）
 				getApplicationEventMulticaster().multicastEvent(earlyEvent);
 			}
 		}

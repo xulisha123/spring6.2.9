@@ -184,6 +184,8 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		Assert.notNull(singletonFactory, "Singleton factory must not be null");
 		this.singletonFactories.put(beanName, singletonFactory);
 		this.earlySingletonObjects.remove(beanName);
+		//this.singletonFactories.put(beanName, singletonFactory);
+		//this.earlySingletonObjects.put(beanName,singletonFactory.getObject());
 		this.registeredSingletons.add(beanName);
 	}
 
@@ -211,6 +213,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		// Quick check for existing instance without full singleton lock.
 		Object singletonObject = this.singletonObjects.get(beanName);
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
+			// 为什么不加锁？ 为了解决死锁问题
 			singletonObject = this.earlySingletonObjects.get(beanName);
 			if (singletonObject == null && allowEarlyReference) {
 				//6之前的版本的版本是synchronized
@@ -263,7 +266,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		// 同步=true(启用宽松创建机制) , 异步=false  未指定=null(默认)
 		Boolean lockFlag = isCurrentThreadAllowedToHoldSingletonLock();
 		//  lockFlag==true||null = true , lockFlag==false = false
-		// 除了异步都需要进行单例锁
+		// 除了异步都需要进行单例锁  acquireLock=true 代表要上锁  false代表不要上锁
 		boolean acquireLock = !Boolean.FALSE.equals(lockFlag);
 		// 同步 --> 加锁
 		boolean locked = (acquireLock && this.singletonLock.tryLock());

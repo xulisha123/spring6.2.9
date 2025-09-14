@@ -56,10 +56,15 @@ public abstract class AopConfigUtils {
 	 */
 	private static final List<Class<?>> APC_PRIORITY_LIST = new ArrayList<>(3);
 
+	// 这三个类是Spring AOP框架中的自动代理创建器，它们按照功能复杂度递增的顺序排列在优先级列表中
 	static {
-		// Set up the escalation list...
+		// 这是最基础的自动代理创建器，只处理基础设施级别的Advisor
+		// @EnableTransactionManagement会用这个， 因为事务不需要用到AspectJ的能力
 		APC_PRIORITY_LIST.add(InfrastructureAdvisorAutoProxyCreator.class);
+		// 这个创建器扩展了基础功能，增加了对AspectJ的支持
 		APC_PRIORITY_LIST.add(AspectJAwareAdvisorAutoProxyCreator.class);
+		// 这是功能最完整的自动代理创建器它继承自上面AspectJAwareAdvisorAutoProxyCreator，
+		// 并且能够@AspectJ和通知单等  @EnableAspectJAutoProxy会用这个
 		APC_PRIORITY_LIST.add(AnnotationAwareAspectJAutoProxyCreator.class);
 	}
 
@@ -96,7 +101,7 @@ public abstract class AopConfigUtils {
 	@Nullable
 	public static BeanDefinition registerAspectJAnnotationAutoProxyCreatorIfNecessary(
 			BeanDefinitionRegistry registry, @Nullable Object source) {
-
+		// AnnotationAwareAspectJAutoProxyCreator 具备 解析切面， 创建代理， 循环依赖AOP
 		return registerOrEscalateApcAsRequired(AnnotationAwareAspectJAutoProxyCreator.class, registry, source);
 	}
 
@@ -114,12 +119,14 @@ public abstract class AopConfigUtils {
 		}
 	}
 
+	// AOP和事务都会调用这个方法，  cls不一样 ，
 	@Nullable
 	private static BeanDefinition registerOrEscalateApcAsRequired(
 			Class<?> cls, BeanDefinitionRegistry registry, @Nullable Object source) {
 
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
 
+		// internalAutoProxyCreator   根据已有BeanClass和当前注册的cls  看谁的优先级高
 		if (registry.containsBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME)) {
 			BeanDefinition apcDefinition = registry.getBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME);
 			if (!cls.getName().equals(apcDefinition.getBeanClassName())) {
@@ -131,7 +138,7 @@ public abstract class AopConfigUtils {
 			}
 			return null;
 		}
-
+		// 注册一个新的internalAutoProxyCreator
 		RootBeanDefinition beanDefinition = new RootBeanDefinition(cls);
 		beanDefinition.setSource(source);
 		beanDefinition.getPropertyValues().add("order", Ordered.HIGHEST_PRECEDENCE);

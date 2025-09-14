@@ -134,7 +134,7 @@ public class ThrowsAdviceInterceptor implements MethodInterceptor, AfterAdvice {
 	@Nullable
 	public Object invoke(MethodInvocation mi) throws Throwable {
 		try {
-			return mi.proceed();
+			return mi.proceed();  // 下一个
 		}
 		catch (Throwable ex) {
 			Method handlerMethod = getExceptionHandler(ex);

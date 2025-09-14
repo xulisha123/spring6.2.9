@@ -9,8 +9,8 @@ import java.util.Arrays;
 /**
  * Created by xsls on 2019/6/10.
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class TulingLogAspect {
 
     @Pointcut( "execution(* com.xushu.circulardependencies.aopdemo.IInstanceA.say(..))")

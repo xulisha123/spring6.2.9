@@ -21,7 +21,9 @@ public  class Car implements FactoryBean<Tank> {
 
 	@Override
 	public Tank getObject() throws Exception {
+		// 最终注册spring容器中的bean对象
 		System.out.println("FactoryBean");
+		// 创建动态代理
 		return new Tank();
 	}
 

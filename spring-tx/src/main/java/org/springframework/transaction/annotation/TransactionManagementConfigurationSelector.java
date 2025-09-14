@@ -46,6 +46,10 @@ public class TransactionManagementConfigurationSelector extends AdviceModeImport
 	@Override
 	protected String[] selectImports(AdviceMode adviceMode) {
 		return switch (adviceMode) {
+			// AutoProxyRegistrar= 动态代理BeanPostProcessor
+			// ProxyTransactionManagementConfiguration 是个配置类：
+			//        包含  1.pointcut= 根据@Transactional匹配
+			//             2.MethodInterceptor= 方法拦截器（事务增强）
 			case PROXY -> new String[] {AutoProxyRegistrar.class.getName(),
 					ProxyTransactionManagementConfiguration.class.getName()};
 			case ASPECTJ -> new String[] {determineTransactionAspectClass()};

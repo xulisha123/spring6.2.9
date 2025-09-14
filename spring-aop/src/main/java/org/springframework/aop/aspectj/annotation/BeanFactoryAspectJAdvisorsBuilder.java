@@ -87,14 +87,25 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 	 */
 	@SuppressWarnings("NullAway")
 	public List<Advisor> buildAspectJAdvisors() {
+		// 用于保存切面的名称,该地方aspectNames 是我们的类级别的缓存，用户缓存已经解析出来的切面信息
 		List<String> aspectNames = this.aspectBeanNames;
-
+		// 缓存字段aspectNames没有值 会在第一个单例执行后置处理器（AnnotationAwareAspectJAutoProxyCreator注册之后）的时候就会触发解析切面的操作
 		if (aspectNames == null) {
+			// 加上同步锁， 防止多线程同时加载Aspect
 			synchronized (this) {
 				aspectNames = this.aspectBeanNames;
+				//做了双重检查加锁
 				if (aspectNames == null) {
+					// 保存所有通知的集合
 					List<Advisor> advisors = new ArrayList<>();
+					// 保存切面的名称的集合
 					aspectNames = new ArrayList<>();
+					/**
+					 * aop功能中在这里传入的是Object.class，代表去容器中获取到所有的组件的名称，然后再经过
+					 * 一一的进行遍历，这个过程是十分的消耗性能的，所以说spring会再这里加入了保存切面信息的缓存。
+					 * 但是事务功能不一样，事务模块的功能是直接去容器中获取Advisor类型的，选择范围小，且不消耗性能。所以
+					 * spring在事务模块中没有加入缓存来保存我们的事务相关的advisor
+					 */
 					String[] beanNames = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(
 							this.beanFactory, Object.class, true, false);
 					for (String beanName : beanNames) {
@@ -107,13 +118,17 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 						if (beanType == null) {
 							continue;
 						}
+						//根据class对象判断是不是切面
 						if (this.advisorFactory.isAspect(beanType)) {
 							try {
 								AspectMetadata amd = new AspectMetadata(beanType, beanName);
+								//  获取@Aspect指定的value , 判断是单例（aspectj提供的范围控制）还是其他范围， 没指定默认是单例
 								if (amd.getAjType().getPerClause().getKind() == PerClauseKind.SINGLETON) {
 									MetadataAwareAspectInstanceFactory factory =
 											new BeanFactoryAspectInstanceFactory(this.beanFactory, beanName);
+									// 获取切面类中所有通知
 									List<Advisor> classAdvisors = this.advisorFactory.getAdvisors(factory);
+									//加入到缓存中
 									if (this.beanFactory.isSingleton(beanName)) {
 										this.advisorsCache.put(beanName, classAdvisors);
 									}
@@ -123,7 +138,7 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 									advisors.addAll(classAdvisors);
 								}
 								else {
-									// Per target or per this.
+									// aspectj是其他作用域， 而bean是单例就报错
 									if (this.beanFactory.isSingleton(beanName)) {
 										throw new IllegalArgumentException("Bean with name '" + beanName +
 												"' is a singleton, but aspect instantiation model is not singleton");

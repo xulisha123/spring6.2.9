@@ -12,6 +12,6 @@ public class MainStart {
 		// spring容器  ioc容器  spring上下文    创建bean   依赖注入
 		AnnotationConfigApplicationContext context =
 				new AnnotationConfigApplicationContext(MainStart.class);
-
+		context.close();
 	}
 }

@@ -13,22 +13,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class AService implements IAService {
 
+	@Autowired
     private IBService bService;
 
-	@Lazy
-	public AService(IBService bService) {
-		this.bService = bService;
-	}
 
 	@Override
 	public void say() {
 		System.out.println("I'm A， My B is"+bService.toString());
 	}
 
-	/*public AService() throws InterruptedException {
-		Thread.sleep(50000);
+	public AService() throws InterruptedException {
 		System.out.println("创建A");
-	}*/
+	}
 
 
 	@Override

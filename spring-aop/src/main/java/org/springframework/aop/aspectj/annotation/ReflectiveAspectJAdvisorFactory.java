@@ -123,26 +123,23 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 
 	@Override
 	public List<Advisor> getAdvisors(MetadataAwareAspectInstanceFactory aspectInstanceFactory) {
+		//获取标记为Aspect的类
 		Class<?> aspectClass = aspectInstanceFactory.getAspectMetadata().getAspectClass();
+		//获取切面类的名称
 		String aspectName = aspectInstanceFactory.getAspectMetadata().getAspectName();
+		//校验是否切面类
 		validate(aspectClass);
 
-		// We need to wrap the MetadataAwareAspectInstanceFactory with a decorator
-		// so that it will only instantiate once.
+		// 我们需要用装饰器包装 MetadataAwareAspectInstanceFactory
+		// 这样它就只会实例化一次。
 		MetadataAwareAspectInstanceFactory lazySingletonAspectInstanceFactory =
 				new LazySingletonAspectInstanceFactoryDecorator(aspectInstanceFactory);
 
 		List<Advisor> advisors = new ArrayList<>();
+		//获取到切面类中的所有方法，但是该方法不会解析标注了@PointCut注解的方法
 		for (Method method : getAdvisorMethods(aspectClass)) {
 			if (method.equals(ClassUtils.getMostSpecificMethod(method, aspectClass))) {
-				// Prior to Spring Framework 5.2.7, advisors.size() was supplied as the declarationOrderInAspect
-				// to getAdvisor(...) to represent the "current position" in the declared methods list.
-				// However, since Java 7 the "current position" is not valid since the JDK no longer
-				// returns declared methods in the order in which they are declared in the source code.
-				// Thus, we now hard code the declarationOrderInAspect to 0 for all advice methods
-				// discovered via reflection in order to support reliable advice ordering across JVM launches.
-				// Specifically, a value of 0 aligns with the default value used in
-				// AspectJPrecedenceComparator.getAspectDeclarationOrder(Advisor).
+				//挨个去解析我们切面中的方法
 				Advisor advisor = getAdvisor(method, lazySingletonAspectInstanceFactory, 0, aspectName);
 				if (advisor != null) {
 					advisors.add(advisor);
@@ -206,7 +203,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 			int declarationOrderInAspect, String aspectName) {
 
 		validate(aspectInstanceFactory.getAspectMetadata().getAspectClass());
-
+		// 获得当前通知的 切点表达式
 		AspectJExpressionPointcut expressionPointcut = getPointcut(
 				candidateAdviceMethod, aspectInstanceFactory.getAspectMetadata().getAspectClass());
 		if (expressionPointcut == null) {

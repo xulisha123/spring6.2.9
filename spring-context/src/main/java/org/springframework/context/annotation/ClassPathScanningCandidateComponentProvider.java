@@ -468,10 +468,10 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 				}
 				try {
 					MetadataReader metadataReader = getMetadataReaderFactory().getMetadataReader(resource);
-					if (isCandidateComponent(metadataReader)) {
+					if (isCandidateComponent(metadataReader)) {  // 匹配是不是@Compoennt
 						ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader);
 						sbd.setSource(resource);
-						if (isCandidateComponent(sbd)) {
+						if (isCandidateComponent(sbd)) {   // 匹配是不是接口
 							if (debugEnabled) {
 								logger.debug("Identified candidate component class: " + resource);
 							}
@@ -537,7 +537,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	 * @return whether the class qualifies as a candidate component
 	 */
 	protected boolean isCandidateComponent(MetadataReader metadataReader) throws IOException {
-		for (TypeFilter tf : this.excludeFilters) {
+		for (TypeFilter tf : this.excludeFilters) {  //排除配置类
 			if (tf.match(metadataReader, getMetadataReaderFactory())) {
 				return false;
 			}

@@ -11,10 +11,6 @@ public class My4SmartInstantiationAwareBeanPostProcessor implements SmartInstant
 	@Override
 	public Object getEarlyBeanReference(Object bean, String beanName) throws BeansException {
 
-		// A
-		//  B.a=  proxy;
-		// 有些bean 会在初始化之后 做事情：  proxy   子类对象
-		// 单例池(A(proxy))
 
 		System.out.println("4."+beanName+"实例化后..解决循环依赖时bean和初始化后的bean不一致");
 

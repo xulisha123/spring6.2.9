@@ -1097,7 +1097,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 		}
 
-		// Traditional behavior: forced to always hold a full lock.
+		// 返回null 以为默认使用同步上锁的方式
 		return null;
 	}
 
@@ -1123,12 +1123,14 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					CompletableFuture<?> future = preInstantiateSingleton(beanName, mbd);
 					// 存在异步创建bean
 					if (future != null) {
+						// 如果返回null  （不会阻塞等待）
 						futures.add(future);
 					}
 				}
 			}
 		}
 		finally {
+			// 非阻塞执行的代码   创建bean会根据mainThreadPrefix来决定是否上锁   异步bean在创建过程就会上锁
 			this.mainThreadPrefix = null;
 			this.preInstantiationThread.remove();
 		}
@@ -1140,6 +1142,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			catch (CompletionException ex) {
 				ReflectionUtils.rethrowRuntimeException(ex.getCause());
 			}
+			// 应该加在这里
+//			finally {
+//				this.mainThreadPrefix = null;
+//			}
 		}
 
 		// Trigger post-initialization callback for all applicable beans...
@@ -1158,6 +1164,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	private CompletableFuture<?> preInstantiateSingleton(String beanName, RootBeanDefinition mbd) {
 		// 异步创建bean
 		if (mbd.isBackgroundInit()) {
+			// 异步bean线程池
 			Executor executor = getBootstrapExecutor();
 			if (executor != null) {
 				String[] dependsOn = mbd.getDependsOn();
@@ -1166,11 +1173,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 						getBean(dep);
 					}
 				}
+				// 立即初始化bean
 				CompletableFuture<?> future = CompletableFuture.runAsync(
 						() -> instantiateSingletonInBackgroundThread(beanName), executor);
 				// 三级缓存join：  防止并发一起创建
 				addSingletonFactory(beanName, () -> {
 					try {
+						// 等待bean创建完毕
 						future.join();
 					}
 					catch (CompletionException ex) {
@@ -1178,6 +1187,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					}
 					return future;  // not to be exposed, just to lead to ClassCastException in case of mismatch
 				});
+				// 注意 懒加载依然会创建bean， 只不过不会组合join等待（不知道这里是bug还是有意为之）
 				return (!mbd.isLazyInit() ? future : null);
 			}
 			else if (logger.isInfoEnabled()) {
@@ -1201,6 +1211,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	private void instantiateSingletonInBackgroundThread(String beanName) {
+		// 标记当前创建bean的线程  决定后续创建bean是否需要上锁阻塞
 		this.preInstantiationThread.set(PreInstantiation.BACKGROUND);
 		try {
 			instantiateSingleton(beanName);
