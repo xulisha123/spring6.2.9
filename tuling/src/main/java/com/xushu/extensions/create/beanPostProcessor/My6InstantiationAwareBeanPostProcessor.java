@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 
 import java.beans.PropertyDescriptor;
 
+/**
+ *  解析并且进行依赖注入的具体实现
+ */
 @Component
 public class My6InstantiationAwareBeanPostProcessor implements InstantiationAwareBeanPostProcessor {
 

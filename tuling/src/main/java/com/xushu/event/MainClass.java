@@ -17,6 +17,7 @@ public class MainClass {
 		//ioc.refresh();
 
 
+
 		UserService userService = ioc.getBean(UserService.class);
 		userService.registry(new User());
 

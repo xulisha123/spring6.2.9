@@ -1,6 +1,5 @@
 package com.xushu.event;
 
-import com.xushu.extensions.created.event.OrderEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;

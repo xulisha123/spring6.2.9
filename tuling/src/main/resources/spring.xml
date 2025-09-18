@@ -10,6 +10,5 @@
 
 	<bean class="com.xushu.service.UserService" id="userService" scope="prototype"
 	lazy-init="true" >
-
 	</bean>
 </beans>

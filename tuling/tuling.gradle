@@ -26,6 +26,7 @@ dependencies {
     // MySQL连接器 - 升级到最新版本
     implementation 'com.mysql:mysql-connector-j:9.1.0'    // 替代旧的mysql-connector-java [ref:2,21]()
 
+    implementation "com.alibaba:druid:1.2.27"
     // AspectJ - 升级到最新版本，Spring 6兼容
     implementation 'org.aspectj:aspectjrt:1.9.22.1'       // 升级版本，支持Spring 6
     implementation 'org.aspectj:aspectjweaver:1.9.22.1'   // 升级版本，支持Spring 6

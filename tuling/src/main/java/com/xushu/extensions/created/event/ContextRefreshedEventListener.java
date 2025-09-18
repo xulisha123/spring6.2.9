@@ -14,8 +14,8 @@ public class ContextRefreshedEventListener{ //implements ApplicationListener<Con
     //@Async
     @EventListener(ContextRefreshedEvent.class)
     public void onApplicationEvent(ContextRefreshedEvent event)  {
+
             System.out.println("______________\n容器加载完毕\n———————");
-		//
     }
 
 }

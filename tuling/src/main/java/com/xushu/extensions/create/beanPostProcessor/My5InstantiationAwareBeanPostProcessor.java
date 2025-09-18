@@ -5,8 +5,8 @@ import org.springframework.beans.factory.config.InstantiationAwareBeanPostProces
 import org.springframework.stereotype.Component;
 
 /**
- * 在设置属性之前，让任何 InstantiationAwareBeanPostProcessors 都有机会修改 Bean 的状态。
- * 例如，这可用于支持现场注入样式。
+ * 属性注入之前调用， 自己进行属性赋值，不想交给spring依赖注入，就可以返回false
+ *
  */
 @Component
 public class My5InstantiationAwareBeanPostProcessor implements InstantiationAwareBeanPostProcessor {

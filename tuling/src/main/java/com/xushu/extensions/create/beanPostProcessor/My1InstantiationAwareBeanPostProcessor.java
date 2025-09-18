@@ -5,6 +5,12 @@ import org.springframework.beans.factory.config.InstantiationAwareBeanPostProces
 import org.springframework.core.PriorityOrdered;
 import org.springframework.stereotype.Component;
 
+/**
+ *
+ * 创建bean之前
+ * postProcessBeforeInstantiation返回一个bean对象，如果返回了spring终止创建
+ * 自己控制bean的创建
+ */
 @Component
 public class My1InstantiationAwareBeanPostProcessor implements InstantiationAwareBeanPostProcessor {
 

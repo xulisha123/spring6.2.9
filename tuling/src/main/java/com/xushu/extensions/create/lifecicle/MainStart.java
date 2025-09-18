@@ -1,11 +1,9 @@
-package com.xushu.extensions.created;
+package com.xushu.extensions.create.lifecicle;
 
-import org.springframework.context.LifecycleProcessor;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.DefaultLifecycleProcessor;
 
 @Configuration
 @ComponentScan
@@ -16,9 +14,10 @@ public class MainStart {
 		AnnotationConfigApplicationContext context =
 				new AnnotationConfigApplicationContext(MainStart.class);
 
-		context.start();
-		context.stop();
 	}
 
-
+	@Bean(initMethod = "afterPropertiesSet3")
+	public Init init(){
+		return  new Init();
+	}
 }

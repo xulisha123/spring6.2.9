@@ -4,6 +4,9 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.SmartInstantiationAwareBeanPostProcessor;
 import org.springframework.stereotype.Component;
 
+/**
+ * 实例化后..解决循环依赖时bean和初始化后的bean不一致
+ */
 @Component
 public class My4SmartInstantiationAwareBeanPostProcessor implements SmartInstantiationAwareBeanPostProcessor {
 

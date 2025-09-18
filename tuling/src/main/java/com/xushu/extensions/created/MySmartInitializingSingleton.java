@@ -6,6 +6,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 /**
  * 在所有单例bean创建完后调用, 做初始化工作
  * 比如需要依赖创建完后的bean 进行一些初始化工作 ，比如：
@@ -24,9 +26,7 @@ public class MySmartInitializingSingleton implements SmartInitializingSingleton,
 	@Override
 	public void afterSingletonsInstantiated() {
 		//  applicationContext.getBeansOfType()
-
-
-		System.out.println("所有bean创建完后调用..");
+		System.out.println("所有bean创建完后调用.. 需要进行解析bean");
 	}
 
 	@Override

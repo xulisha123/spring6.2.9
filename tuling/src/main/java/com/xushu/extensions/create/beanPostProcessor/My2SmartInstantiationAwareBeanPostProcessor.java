@@ -6,6 +6,11 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Constructor;
 
+/**
+ * 实例化前调用
+ *
+ * 返回构造函数 ，指定对应beanClass的某个构造函数
+ */
 @Component
 public class My2SmartInstantiationAwareBeanPostProcessor implements SmartInstantiationAwareBeanPostProcessor {
 	@Override

@@ -13,5 +13,6 @@ public class My9DestructionAwareBeanPostProcessor implements DestructionAwareBea
 	@Override
 	public void postProcessBeforeDestruction(Object bean, String beanName) throws BeansException {
 		System.out.println("9."+beanName+"销毁.");
+
 	}
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  *  Lifecycle接口没有提供自动启动和停止的特性。
  *  需要显式调用start()和stop()方法来管理自身的生命周期。
  */
-@Component
+//@Component
 public class MyLifecycle2 implements Lifecycle {
 	boolean isRunning;
 	@Override

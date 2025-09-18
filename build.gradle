@@ -23,6 +23,8 @@ configure(allprojects) { project ->
 	apply plugin: "org.springframework.build.localdev"
 	group = "org.springframework"
 	repositories {
+
+		mavenLocal()  //优先从本地仓库中获取
 		mavenCentral()
 		maven {
 			url = "https://repo.spring.io/milestone"

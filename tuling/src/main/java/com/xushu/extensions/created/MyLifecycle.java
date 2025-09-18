@@ -16,16 +16,24 @@ import org.springframework.stereotype.Component;
 @Component
 public class MyLifecycle implements SmartLifecycle {
 	boolean isRunning;
+
+	// 是否自动调用start() 3个因素决定
+	// 1. isAutoStartup 默认true
+	// 2. isRunning 返回false
+	// 3. 实现的SmartLifecycle
 	@Override
 	public void start() {
 		isRunning=true;
 		System.out.println("容器加载完毕，组件启动！");
+
+		// 启动定时任务、 缓存预热、 资源准备...
 	}
 
 	@Override
 	public void stop() {
 		isRunning=false;
 		System.out.println("容器关闭，组件停止！");
+		// 关闭定时器， 清空缓存...
 	}
 
 	// isRunning=false  调用 start      isRunning=true    调用stop
