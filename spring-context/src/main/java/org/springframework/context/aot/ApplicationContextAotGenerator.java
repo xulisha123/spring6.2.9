@@ -52,11 +52,20 @@ public class ApplicationContextAotGenerator {
 			GenerationContext generationContext) {
 
 		return withCglibClassHandler(new CglibClassHandler(generationContext), () -> {
+			// 执行AOT专用的应用上下文刷新，只创建Bean定义不实例化Bean
+			// 同时将RuntimeHints收集到generationContext的RuntimeHints中
 			applicationContext.refreshForAotProcessing(generationContext.getRuntimeHints());
+			// 创建应用上下文初始化代码生成器，负责生成ApplicationContextInitializer类（AOT启动入口）
+			// 这个生成器会创建用于在运行时重建应用上下文状态的Java源码
 			ApplicationContextInitializationCodeGenerator codeGenerator =
 					new ApplicationContextInitializationCodeGenerator(applicationContext, generationContext);
 			DefaultListableBeanFactory beanFactory = applicationContext.getDefaultListableBeanFactory();
+
+			// 创建Bean工厂初始化AOT贡献集合，收集所有AOT处理器的贡献
+			// 然后将这些贡献应用到代码生成器中，生成Bean注册和初始化的代码
 			new BeanFactoryInitializationAotContributions(beanFactory).applyTo(generationContext, codeGenerator);
+			// 返回生成的ApplicationContextInitializer类的完整类名
+			// 这个类名将用作AOT优化应用的入口点
 			return codeGenerator.getGeneratedClass().getName();
 		});
 	}

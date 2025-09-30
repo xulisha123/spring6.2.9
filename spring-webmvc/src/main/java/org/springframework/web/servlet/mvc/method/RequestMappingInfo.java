@@ -403,14 +403,14 @@ public final class RequestMappingInfo implements RequestCondition<RequestMapping
 			return null;
 		}
 		PathPatternsRequestCondition pathPatterns = null;
-		if (this.pathPatternsCondition != null) {
+		if (this.pathPatternsCondition != null) {	// 精确匹配
 			pathPatterns = this.pathPatternsCondition.getMatchingCondition(request);
 			if (pathPatterns == null) {
 				return null;
 			}
 		}
 		PatternsRequestCondition patterns = null;
-		if (this.patternsCondition != null) {
+		if (this.patternsCondition != null) {	// 模糊匹配
 			patterns = this.patternsCondition.getMatchingCondition(request);
 			if (patterns == null) {
 				return null;

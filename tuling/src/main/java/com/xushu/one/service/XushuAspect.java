@@ -1,16 +1,14 @@
-package com.xushu.service;
+package com.xushu.one.service;
 
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.stereotype.Component;
 
 //@Aspect
 //@Component
 public class XushuAspect {
 
-	@Pointcut("execution(* com.xushu.service.UserService.*(..))")
+	@Pointcut("execution(* com.xushu.one.service.UserService.*(..))")
 	void pointcut() {
 	}
 

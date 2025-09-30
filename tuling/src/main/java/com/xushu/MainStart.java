@@ -1,6 +1,6 @@
 package com.xushu;
 
-import com.xushu.service.UserService;
+import com.xushu.one.service.UserService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**

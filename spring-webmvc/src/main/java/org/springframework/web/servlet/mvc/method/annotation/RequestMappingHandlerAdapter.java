@@ -987,12 +987,12 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			});
 			invocableMethod = invocableMethod.wrapConcurrentResult(result);
 		}
-
+		// 对请求参数进行处理
 		invocableMethod.invokeAndHandle(webRequest, mavContainer);
 		if (asyncManager.isConcurrentHandlingStarted()) {
 			return null;
 		}
-
+		// 对封装的ModelAndView进行处理
 		return getModelAndView(mavContainer, modelFactory, webRequest);
 	}
 

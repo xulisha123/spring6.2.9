@@ -114,10 +114,11 @@ public class ServletInvocableHandlerMethod extends InvocableHandlerMethod {
 	 */
 	public void invokeAndHandle(ServletWebRequest webRequest, ModelAndViewContainer mavContainer,
 			Object... providedArgs) throws Exception {
-
+		// 真正的调用我们的目标对象 !!!!!!
 		Object returnValue = invokeForRequest(webRequest, mavContainer, providedArgs);
+		// 设置相关的返回状态
 		setResponseStatus(webRequest);
-
+		// 如果请求处理完成，则设置requestHandled属性
 		if (returnValue == null) {
 			if (isRequestNotModified(webRequest) || getResponseStatus() != null || mavContainer.isRequestHandled()) {
 				disableContentCachingIfNecessary(webRequest);
@@ -133,6 +134,8 @@ public class ServletInvocableHandlerMethod extends InvocableHandlerMethod {
 		mavContainer.setRequestHandled(false);
 		Assert.state(this.returnValueHandlers != null, "No return value handlers");
 		try {
+			// 遍历当前容器中所有ReturnValueHandler，判断哪种handler支持当前返回值的处理，
+			// 如果支持，则使用该handler处理该返回值
 			this.returnValueHandlers.handleReturnValue(
 					returnValue, getReturnValueType(returnValue), mavContainer, webRequest);
 		}

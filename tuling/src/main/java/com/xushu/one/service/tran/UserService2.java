@@ -1,4 +1,4 @@
-package com.xushu.service.tran;
+package com.xushu.one.service.tran;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

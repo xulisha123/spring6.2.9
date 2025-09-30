@@ -510,8 +510,8 @@ public class DispatcherServlet extends FrameworkServlet {
 		initMultipartResolver(context);
 		initLocaleResolver(context);
 		initThemeResolver(context);
-		initHandlerMappings(context);
-		initHandlerAdapters(context);
+		initHandlerMappings(context);	// 处理请求映射的
+		initHandlerAdapters(context);	// 调用handler方法
 		initHandlerExceptionResolvers(context);
 		initRequestToViewNameTranslator(context);
 		initViewResolvers(context);
@@ -896,6 +896,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			for (String className : classNames) {
 				try {
 					Class<?> clazz = ClassUtils.forName(className, DispatcherServlet.class.getClassLoader());
+					// 创建bean
 					Object strategy = createDefaultStrategy(context, clazz);
 					strategies.add((T) strategy);
 				}
@@ -1047,6 +1048,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 */
 	@SuppressWarnings("deprecation")
 	protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
 		HttpServletRequest processedRequest = request;
 		HandlerExecutionChain mappedHandler = null;
 		boolean multipartRequestParsed = false;
@@ -1061,7 +1063,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				processedRequest = checkMultipart(request);
 				multipartRequestParsed = (processedRequest != request);
 
-				// Determine handler for the current request.
+				// 请求路径映射
 				mappedHandler = getHandler(processedRequest);
 				if (mappedHandler == null) {
 					noHandlerFound(processedRequest, response);
@@ -1080,12 +1082,12 @@ public class DispatcherServlet extends FrameworkServlet {
 						return;
 					}
 				}
-
+				//触发拦截器的pre方法,返回false,就不进行处理了
 				if (!mappedHandler.applyPreHandle(processedRequest, response)) {
 					return;
 				}
 
-				// Actually invoke the handler.
+				// 通过适配器真正的调用我们的目标方法
 				mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
 
 				if (asyncManager.isConcurrentHandlingStarted()) {
@@ -1093,6 +1095,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				}
 
 				applyDefaultViewName(processedRequest, mv);
+				// 触发我们拦截器链的post方法
 				mappedHandler.applyPostHandle(processedRequest, response, mv);
 			}
 			catch (Exception ex) {
@@ -1103,12 +1106,15 @@ public class DispatcherServlet extends FrameworkServlet {
 				// making them available for @ExceptionHandler methods and other scenarios.
 				dispatchException = new ServletException("Handler dispatch failed: " + err, err);
 			}
+			// 处理目标方法返回的结果,主要就是渲染视图
 			processDispatchResult(processedRequest, response, mappedHandler, mv, dispatchException);
 		}
 		catch (Exception ex) {
+			// 抛出异常:处理我们拦截器的afterCompletion方法
 			triggerAfterCompletion(processedRequest, response, mappedHandler, ex);
 		}
 		catch (Throwable err) {
+			// 处理我们拦截器的afterCompletion方法
 			triggerAfterCompletion(processedRequest, response, mappedHandler,
 					new ServletException("Handler processing failed: " + err, err));
 		}
@@ -1121,7 +1127,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				asyncManager.setMultipartRequestParsed(multipartRequestParsed);
 			}
 			else {
-				// Clean up any resources used by a multipart request.
+				// 清楚文件上传时候生成的临时文件
 				if (multipartRequestParsed || asyncManager.isMultipartRequestParsed()) {
 					cleanupMultipart(processedRequest);
 				}

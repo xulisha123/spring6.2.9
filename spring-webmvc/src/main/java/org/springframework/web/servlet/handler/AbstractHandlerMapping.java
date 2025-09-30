@@ -522,7 +522,7 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 		if (!ServletRequestPathUtils.hasCachedPath(request)) {
 			initLookupPath(request);
 		}
-
+		// 构建处理器执行链，拦截器和handler方法
 		HandlerExecutionChain executionChain = getHandlerExecutionChain(handler, request);
 
 		if (request.getAttribute(SUPPRESS_LOGGING_ATTRIBUTE) == null) {
@@ -533,7 +533,7 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 				logger.debug("Mapped to " + executionChain.getHandler());
 			}
 		}
-
+		//处理跨越的  暂时不看
 		if (hasCorsConfigurationSource(handler) || CorsUtils.isPreFlightRequest(request)) {
 			CorsConfiguration config = getCorsConfiguration(handler, request);
 			if (getCorsConfigurationSource() != null) {
@@ -625,7 +625,7 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 		HandlerExecutionChain chain = (handler instanceof HandlerExecutionChain handlerExecutionChain ?
 				handlerExecutionChain : new HandlerExecutionChain(handler));
 
-		for (HandlerInterceptor interceptor : this.adaptedInterceptors) {
+ 		for (HandlerInterceptor interceptor : this.adaptedInterceptors) {
 			if (interceptor instanceof MappedInterceptor mappedInterceptor) {
 				if (mappedInterceptor.matches(request)) {
 					chain.addInterceptor(mappedInterceptor.getInterceptor());

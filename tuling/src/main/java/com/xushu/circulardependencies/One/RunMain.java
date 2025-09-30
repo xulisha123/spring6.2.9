@@ -11,6 +11,8 @@ public class RunMain {
 		// 创建所有的Bean
 		XuShuApplicationContext ioc = new XuShuApplicationContext();
 
+		IAService aService = (IAService) ioc.getBean("aService");
+		System.out.println(aService.getClass());
 		IBService bService = (IBService) ioc.getBean("bService");
 		bService.say();
 	}

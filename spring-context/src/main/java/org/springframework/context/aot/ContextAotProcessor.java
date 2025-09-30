@@ -98,16 +98,36 @@ public abstract class ContextAotProcessor extends AbstractAotProcessor<ClassName
 	 * output directories. In addition, run-time hints are registered for the
 	 * application and its entry point.
 	 * @param applicationContext the context to process
+	 *
+	 * 这个方法是AOT处理的核心，它的执行流程如下：
+	 * 1.准备生成环境 - 创建文件管理器和生成上下文
+	 * 2.执行AOT生成 - 使用 ApplicationContextAotGenerator 处理应用上下文
+	 * 3.注册反射提示 - 确保生成的类可以在原生镜像中正确访问
+	 * 4.输出文件 - 写入生成的源码、配置文件和原生镜像属性
 	 */
 	protected ClassName performAotProcessing(GenericApplicationContext applicationContext) {
+		// 创建文件系统生成文件管理器，用于管理生成的源码、资源和类文件的输出
 		FileSystemGeneratedFiles generatedFiles = createFileSystemGeneratedFiles();
+		// 创建默认的代码生成上下文，包含类名生成器和文件管理器
+		// 这个上下文将贯穿整个AOT处理过程，用于协调代码生成
 		DefaultGenerationContext generationContext = new DefaultGenerationContext(
 				createClassNameGenerator(), generatedFiles);
+		// 创建应用上下文AOT生成器，这是执行AOT处理的核心组件
 		ApplicationContextAotGenerator generator = new ApplicationContextAotGenerator();
+		// 执行AOT处理的核心步骤：
+		// 1. 对应用上下文进行AOT刷新处理
+		// 2. 生成ApplicationContextInitializer类的源码
+		// 3. 返回生成的初始化器类名
 		ClassName generatedInitializerClassName = generator.processAheadOfTime(applicationContext, generationContext);
+		// 为生成的ApplicationContextInitializer入口点注册反射提示
+		// 确保在原生镜像中可以正确访问这个类
 		registerEntryPointHint(generationContext, generatedInitializerClassName);
+		// 将所有生成的内容（Java源码、资源文件等）写入到文件系统
 		generationContext.writeGeneratedContent();
+		// 将收集到的运行时提示写入reflect-config.json等配置文件
+		// 这些文件用于GraalVM原生镜像编译
 		writeHints(generationContext.getRuntimeHints());
+		// 生成native-image.properties文件，包含原生镜像编译的默认参数
 		writeNativeImageProperties(getDefaultNativeImageArguments(getApplicationClass().getName()));
 		return generatedInitializerClassName;
 	}

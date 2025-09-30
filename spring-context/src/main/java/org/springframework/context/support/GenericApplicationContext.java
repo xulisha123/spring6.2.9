@@ -406,6 +406,12 @@ public class GenericApplicationContext extends AbstractApplicationContext implem
 	 * @since 6.0
 	 */
 	public void refreshForAotProcessing(RuntimeHints runtimeHints) {
+		// 与常规的 refresh() 不同，refreshForAotProcessing() 有特殊的处理逻辑
+		/*
+		* 	只创建Bean定义，不创建Bean实例
+			执行BeanFactoryPostProcessor，包括配置类解析、import选择器、类路径扫描等
+			调用特定的后处理器，如 MergedBeanDefinitionPostProcessor 和 SmartInstantiationAwareBeanPostProcessor
+		* */
 		if (logger.isDebugEnabled()) {
 			logger.debug("Preparing bean factory for AOT processing");
 		}
@@ -415,8 +421,11 @@ public class GenericApplicationContext extends AbstractApplicationContext implem
 		postProcessBeanFactory(this.beanFactory);
 		invokeBeanFactoryPostProcessors(this.beanFactory);
 		this.beanFactory.freezeConfiguration();
+		// AOT会在构建时处理所有的bean属性、依赖关系、生命周期回调等复杂配置，避免运行时的BeanDefinition解析
 		PostProcessorRegistrationDelegate.invokeMergedBeanDefinitionPostProcessors(this.beanFactory);
+		// 确定Bean的最终类型并注册代理相关的运行时提示，确保GraalVM原生镜像能正确处理代理类
 		preDetermineBeanTypes(runtimeHints);
+		// 一个个创建bean?
 	}
 
 	/**

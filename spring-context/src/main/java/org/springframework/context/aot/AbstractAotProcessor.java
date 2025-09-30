@@ -77,7 +77,7 @@ public abstract class AbstractAotProcessor<T> {
 	 * Run AOT processing.
 	 * @return the result of the processing.
 	 */
-	public final T process() {
+	public final T  process() {
 		try {
 			System.setProperty(AOT_PROCESSING, "true");
 			return doProcess();

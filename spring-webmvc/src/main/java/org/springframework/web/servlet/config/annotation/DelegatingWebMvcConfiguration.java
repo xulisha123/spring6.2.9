@@ -42,7 +42,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
  */
 @Configuration(proxyBeanMethods = false)
 public class DelegatingWebMvcConfiguration extends WebMvcConfigurationSupport {
-
+	// 所有实现了WebMvcConfigurer的beanb
 	private final WebMvcConfigurerComposite configurers = new WebMvcConfigurerComposite();
 
 
@@ -63,7 +63,6 @@ public class DelegatingWebMvcConfiguration extends WebMvcConfigurationSupport {
 	protected void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
 		this.configurers.configureContentNegotiation(configurer);
 	}
-
 	@Override
 	protected void configureAsyncSupport(AsyncSupportConfigurer configurer) {
 		this.configurers.configureAsyncSupport(configurer);

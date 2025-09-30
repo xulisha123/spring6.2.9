@@ -329,6 +329,10 @@ public class PatternsRequestCondition extends AbstractRequestCondition<PatternsR
 				}
 			}
 		}
+		// 通配符匹配器AntPathMatcher
+		/*? 匹配一个字符
+		 * 匹配零个或多个字符
+		 ** 匹配零个或多个目录*/
 		if (this.pathMatcher.match(pattern, lookupPath)) {
 			return pattern;
 		}

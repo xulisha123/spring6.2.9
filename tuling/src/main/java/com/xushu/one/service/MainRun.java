@@ -1,9 +1,6 @@
-package com.xushu.service;
+package com.xushu.one.service;
 
-import com.xushu.extensions.create.aware.event.User;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class MainRun {
 

@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group 'org.springframework'
+version '6.2.9'
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    implementation("jakarta.servlet:jakarta.servlet-api")
+
+
+    implementation(project(":spring-context"))
+    implementation(project(":spring-context-support"))
+    implementation(project(":spring-webmvc"))
+    implementation(project(":spring-core"))
+    implementation(project(":spring-web"))
+
+    implementation group: 'com.fasterxml.jackson.core',name: 'jackson-core',version:'2.9.4'
+    implementation group: 'com.fasterxml.jackson.core',name: 'jackson-annotations',version:'2.9.4'
+    implementation group: 'com.fasterxml.jackson.core',name: 'jackson-databind',version:'2.9.4'
+
+}
+
+test {
+    useJUnitPlatform()
+}

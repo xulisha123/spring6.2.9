@@ -8,7 +8,7 @@
 	   http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd"
 	   >
 
-	<bean class="com.xushu.service.UserService" id="userService" scope="prototype"
-	lazy-init="true" >
+	<bean class="com.xushu.one.service.UserService" id="userService" scope="prototype"
+          lazy-init="true" >
 	</bean>
 </beans>

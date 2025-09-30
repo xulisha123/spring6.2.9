@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class XuShuApplicationContext  {
 
 
-    private Map<String, BeanDefinition> beanDefinitionMap = new LinkedHashMap<>(256);
+    private Map<String, BeanDefinition> beanDefinitionMap = new LinkedHashMap <>(256);
 
 	// 单例池 一级缓存
 	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @EnableAspectJAutoProxy
 public class XushuAspect {
 
-	@Pointcut("execution(public void com.xushu.service.UserService.test())")
+	@Pointcut("execution(public void com.xushu.one.service.UserService.test())")
 	void pointcut() {
 	}
 

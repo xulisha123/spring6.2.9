@@ -190,7 +190,7 @@ public class RequestResponseBodyMethodProcessor extends AbstractMessageConverter
 	public void handleReturnValue(@Nullable Object returnValue, MethodParameter returnType,
 			ModelAndViewContainer mavContainer, NativeWebRequest webRequest)
 			throws IOException, HttpMediaTypeNotAcceptableException, HttpMessageNotWritableException {
-
+		//设置视图解析器已经处理过RequestHandled
 		mavContainer.setRequestHandled(true);
 		ServletServerHttpRequest inputMessage = createInputMessage(webRequest);
 		ServletServerHttpResponse outputMessage = createOutputMessage(webRequest);
@@ -204,7 +204,7 @@ public class RequestResponseBodyMethodProcessor extends AbstractMessageConverter
 			invokeErrorResponseInterceptors(detail, null);
 		}
 
-		// Try even with null return value. ResponseBodyAdvice could get involved.
+		// 通过我们的消息转换器来把返回值写出去
 		writeWithMessageConverters(returnValue, returnType, inputMessage, outputMessage);
 	}
 

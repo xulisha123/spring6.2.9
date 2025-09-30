@@ -400,10 +400,11 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	protected HandlerMethod lookupHandlerMethod(String lookupPath, HttpServletRequest request) throws Exception {
 		List<Match> matches = new ArrayList<>();
 		List<T> directPathMatches = this.mappingRegistry.getMappingsByDirectPath(lookupPath);
-		if (directPathMatches != null) {
+		if (directPathMatches != null) {	//  精确匹配
 			addMatchingMappings(directPathMatches, matches, request);
 		}
-		if (matches.isEmpty()) {
+		if (matches.isEmpty()) {			// 模糊匹配
+			// 再匹配所有的， 因为有些模糊路径：/users/*  /user/{id}
 			addMatchingMappings(this.mappingRegistry.getRegistrations().keySet(), matches, request);
 		}
 		if (!matches.isEmpty()) {
@@ -656,7 +657,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 
 				// Init validation flags
 				// We do this strictly after using the original instance in the CORS lookups
-				handlerMethod = handlerMethod.createWithValidateFlags();
+ 				handlerMethod = handlerMethod.createWithValidateFlags();
 
 				this.registry.put(mapping,
 						new MappingRegistration<>(mapping, handlerMethod, directPaths, name, corsConfig != null));
